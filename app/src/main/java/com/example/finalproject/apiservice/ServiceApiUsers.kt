@@ -2,6 +2,7 @@ package com.example.finalproject.apiservice
 
 import com.example.finalproject.model.DataUser
 import com.example.finalproject.model.LoginData
+import com.example.finalproject.model.LoginRequest
 import com.example.finalproject.model.LoginResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,7 +15,7 @@ interface ServiceApiUsers {
     suspend fun createUser(@Body dataUser: DataUser):retrofit2.Response<Void>
 
     @POST("login")
-    suspend fun login(@Body loginData : LoginData): retrofit2.Response<LoginResponse>
+    suspend fun login(@Body loginRequest: LoginRequest): retrofit2.Response<LoginResponse>
 
     @GET("user/{id}")
     suspend fun getSatuUser(@Path("id") id : Int) : DataUser

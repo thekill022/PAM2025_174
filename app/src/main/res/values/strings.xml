@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Final Project</string>
+    <string name="login">Login</string>
+    <string name="regis">Register</string>
+    <string name="home">Home</string>
 </resources>

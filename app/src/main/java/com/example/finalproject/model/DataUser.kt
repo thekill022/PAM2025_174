@@ -8,24 +8,30 @@ data class DataUser(
     val nama: String,
     val usia: Int,
     val email: String,
-    val password: String,
+    val password: String = "",
     val tinggi_badan: Int,
     val aktivitas_harian: String,
+    val jenis_kelamin : String,
     val created_at: String,
     val berat : Float = 0.0f
 )
 
 @Serializable
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
+@Serializable
 data class LoginData(
-    val email : String,
-    val password : String
+    val token: String,
+    val user : DataUser
 )
 
 @Serializable
 data class LoginResponse(
-    val token : String,
-    @SerialName("userWithoutPassword")
-    val user : DataUser
+    val success : Boolean,
+    val data : LoginData
 )
 
 data class DetailUser(
@@ -36,6 +42,7 @@ data class DetailUser(
     val password: String = "",
     val tinggi_badan: Int = 0,
     val aktivitas_harian: String = "",
+    val jenis_kelamin : String = "",
     val created_at: String = "",
     val berat : Float = 0.0F
 )
@@ -43,6 +50,29 @@ data class DetailUser(
 data class UIStateUser(
     val detailUser : DetailUser = DetailUser(),
     val isEntryValid : Boolean = false
+)
+
+data class  UIStateLogin(
+    val email : String = "",
+    val password : String = "",
+    val isLoading : Boolean = false,
+    val isSuccess : Boolean = false,
+    val errorMEssage : String? = null,
+    val isEntryValid : Boolean = false
+)
+
+data class RegisterUiState(
+    val nama: String = "",
+    val usia: String = "",
+    val email: String = "",
+    val password: String = "",
+    val tinggiBadan: String = "",
+    val beratBadan: String = "",
+    val aktivitasHarian: String = "",
+    val jenis_kelamin : String = "",
+    val isLoading: Boolean = false,
+    val isSuccess: Boolean = false,
+    val errorMessage: String? = null
 )
 
 // method methodnya ni
@@ -54,6 +84,7 @@ fun DetailUser.toDataUser() : DataUser = DataUser(
     password = password,
     tinggi_badan = tinggi_badan,
     aktivitas_harian = aktivitas_harian,
+    jenis_kelamin = jenis_kelamin,
     created_at = created_at,
     berat = berat
 )
@@ -66,6 +97,7 @@ fun DataUser.toDetailUser() : DetailUser = DetailUser(
     password = password,
     tinggi_badan = tinggi_badan,
     aktivitas_harian = aktivitas_harian,
+    jenis_kelamin = jenis_kelamin,
     created_at = created_at,
     berat = berat
 )
