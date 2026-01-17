@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context // Pastikan import ini ada
 import com.example.finalproject.apiservice.ServiceApiBerat
 import com.example.finalproject.apiservice.ServiceApiMakanan
+import com.example.finalproject.apiservice.ServiceApiMeal
 import com.example.finalproject.apiservice.ServiceApiUsers
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -17,6 +18,7 @@ interface ContainerApp {
     val repositoryDataMakanan : RepositoryDataMakanan
     val repositoryDataBerat : RepositoryDataBerat
     val userPreferenceRepository : UserPreferenceRepository
+    val repositoryMealPlan : RepositoryMealPlan
 }
 
 class DefaultContainerApp(private val context: Context) : ContainerApp {
@@ -53,6 +55,10 @@ class DefaultContainerApp(private val context: Context) : ContainerApp {
         retrofit.create(ServiceApiBerat::class.java)
     }
 
+    private val retrofitServiceMealPlan : ServiceApiMeal by lazy {
+        retrofit.create(ServiceApiMeal::class.java)
+    }
+
     override val userPreferenceRepository = UserPreferenceRepository(context.dataStore)
 
     override val repositoryDataUser: RepositoryDataUser by lazy {
@@ -65,6 +71,10 @@ class DefaultContainerApp(private val context: Context) : ContainerApp {
 
     override val repositoryDataBerat: RepositoryDataBerat by lazy {
         JaringanRepositoryBerat(userPreferenceRepository, retrofitServiceBerat)
+    }
+
+    override val repositoryMealPlan: RepositoryMealPlan by lazy {
+        JaringanRepositoryMealPlan(retrofitServiceMealPlan, userPreferenceRepository)
     }
 }
 

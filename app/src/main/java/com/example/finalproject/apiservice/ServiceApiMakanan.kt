@@ -1,6 +1,9 @@
 package com.example.finalproject.apiservice
 
+import com.example.finalproject.model.AddMakananResponse
 import com.example.finalproject.model.DataMakanan
+import com.example.finalproject.model.FoodCalorieRequest
+import com.example.finalproject.model.FoodCalorieResponse
 import com.example.finalproject.model.GeneralResponse
 import com.example.finalproject.model.MakananResponse
 import retrofit2.Response
@@ -17,7 +20,7 @@ interface ServiceApiMakanan {
     suspend fun addMakanan(
         @Header("Authorization") token: String,
         @Body makanan: DataMakanan
-    ): Response<GeneralResponse>
+    ): Response<AddMakananResponse>
 
     @GET("food/{id}")
     suspend fun getMakanan(
@@ -31,4 +34,10 @@ interface ServiceApiMakanan {
         @Header("Authorization") token: String,
         @Path("id") foodId: Int
     ): Response<GeneralResponse>
+
+    @POST("meal/calories")
+    suspend fun getFoodCalories(
+        @Header("Authorization") token: String,
+        @Body request: FoodCalorieRequest
+    ): Response<FoodCalorieResponse>
 }

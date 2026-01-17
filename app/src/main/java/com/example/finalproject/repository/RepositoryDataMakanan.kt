@@ -1,16 +1,20 @@
 package com.example.finalproject.repository
 
 import com.example.finalproject.apiservice.ServiceApiMakanan
+import com.example.finalproject.model.AddMakananResponse
 import com.example.finalproject.model.DataMakanan
+import com.example.finalproject.model.FoodCalorieRequest
+import com.example.finalproject.model.FoodCalorieResponse
 import com.example.finalproject.model.GeneralResponse
 import com.example.finalproject.model.MakananResponse
 import kotlinx.coroutines.flow.first
 import retrofit2.Response
 
 interface RepositoryDataMakanan {
-    suspend fun addMakanan(dataMakanan: DataMakanan): Response<GeneralResponse>
+    suspend fun addMakanan(dataMakanan: DataMakanan): Response<AddMakananResponse>
     suspend fun getMakanan(userId: Int, tanggal: String): Response<MakananResponse>
     suspend fun deleteMakanan(id: Int): Response<GeneralResponse>
+    suspend fun getFoodCalories(foodName: String): Response<FoodCalorieResponse>
 }
 
 class JaringanRepositoryMakanan(
@@ -23,7 +27,7 @@ class JaringanRepositoryMakanan(
         return "Bearer $token"
     }
 
-    override suspend fun addMakanan(dataMakanan: DataMakanan): Response<GeneralResponse> {
+    override suspend fun addMakanan(dataMakanan: DataMakanan): Response<AddMakananResponse> {
         val token = getToken()
         return serviceApiMakanan.addMakanan(token, dataMakanan)
     }
@@ -36,5 +40,11 @@ class JaringanRepositoryMakanan(
     override suspend fun deleteMakanan(id: Int): Response<GeneralResponse> {
         val token = getToken()
         return serviceApiMakanan.deleteMakanan(token, id)
+    }
+
+    override suspend fun getFoodCalories(foodName: String): Response<FoodCalorieResponse> {
+        val token = getToken()
+        val request = FoodCalorieRequest(foodName)
+        return serviceApiMakanan.getFoodCalories(token, request)
     }
 }

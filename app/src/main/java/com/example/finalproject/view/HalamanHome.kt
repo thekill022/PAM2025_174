@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.finalproject.view.AddFoodDialog
 import com.example.finalproject.viewmodel.PenyediaViewModel
 import com.example.finalproject.viewmodel.HomeViewModel
 
@@ -33,6 +34,8 @@ val BackgroundColor = Color(0xFFF5F5F5)
 @Composable
 fun HomeScreen(
     navigateToItemEntry: () -> Unit,
+    navigateToMealPlan : () -> Unit,
+    navigateToProfile: () -> Unit = {},
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -53,16 +56,16 @@ fun HomeScreen(
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Outlined.Assignment, contentDescription = "AI Planner") },
-                    label = { Text("AI Planner", color = if (selectedItem == 0) GreenGradient else Color.Black) },
+                    label = { Text("AI Planner") },
                     selected = selectedItem == 1,
-                    onClick = { selectedItem = 1 },
+                    onClick = { navigateToMealPlan() },
                     colors = NavigationBarItemDefaults.colors(selectedIconColor = GreenGradient, indicatorColor = Color.White)
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Outlined.Person, contentDescription = "Profile") },
-                    label = { Text("Profile", color = if (selectedItem == 0) GreenGradient else Color.Black) },
+                    label = { Text("Profile")},
                     selected = selectedItem == 2,
-                    onClick = { selectedItem = 2 },
+                    onClick = { navigateToProfile() },
                     colors = NavigationBarItemDefaults.colors(selectedIconColor = GreenGradient, indicatorColor = Color.White)
                 )
             }
@@ -85,23 +88,31 @@ fun HomeScreen(
             ) {
 
                 item {
-                    val totalSarapan = uiState.listSarapan.sumOf { it.kalori * it.quantity }
-                    MealCard("Sarapan", totalSarapan, Icons.Default.Coffee, navigateToItemEntry)
+                    val totalSarapan = uiState.listSarapan.sumOf { it.kalori }
+                    MealCard("Sarapan", totalSarapan, Icons.Default.Coffee) {
+                        viewModel.showAddFoodDialog("Sarapan")
+                    }
                 }
 
                 item {
-                    val totalSiang = uiState.listSiang.sumOf { it.kalori * it.quantity }
-                    MealCard("Makan Siang", totalSiang, Icons.Default.Restaurant, navigateToItemEntry)
+                    val totalSiang = uiState.listSiang.sumOf { it.kalori }
+                    MealCard("Makan Siang", totalSiang, Icons.Default.Restaurant) {
+                        viewModel.showAddFoodDialog("Makan Siang")
+                    }
                 }
 
                 item {
-                    val totalMalam = uiState.listMalam.sumOf { it.kalori * it.quantity }
-                    MealCard("Makan Malam", totalMalam, Icons.Default.NightsStay, navigateToItemEntry)
+                    val totalMalam = uiState.listMalam.sumOf { it.kalori }
+                    MealCard("Makan Malam", totalMalam, Icons.Default.NightsStay) {
+                        viewModel.showAddFoodDialog("Makan Malam")
+                    }
                 }
 
                 item {
-                    val totalSnack = uiState.listSnack.sumOf { it.kalori * it.quantity }
-                    MealCard("Snack / Lainnya", totalSnack, Icons.Default.Nightlife, navigateToItemEntry)
+                    val totalSnack = uiState.listSnack.sumOf { it.kalori }
+                    MealCard("Snack / Lainnya", totalSnack, Icons.Default.Nightlife) {
+                        viewModel.showAddFoodDialog("Snack")
+                    }
                 }
             }
         }
@@ -110,6 +121,21 @@ fun HomeScreen(
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(color = BlueGradient)
             }
+        }
+
+        // Dialog untuk input makanan manual
+        if (uiState.showAddFoodDialog) {
+            AddFoodDialog(
+                category = uiState.selectedCategory,
+                foodInputText = uiState.foodInputText,
+                isLoading = uiState.isLoadingCalories,
+                calorieData = uiState.calorieData,
+                message = uiState.addFoodMessage,
+                onFoodInputChange = { viewModel.updateFoodInputText(it) },
+                onGetCalories = { viewModel.getFoodCalories() },
+                onSave = { viewModel.saveFoodFromCalorieData() },
+                onDismiss = { viewModel.hideAddFoodDialog() }
+            )
         }
     }
 }

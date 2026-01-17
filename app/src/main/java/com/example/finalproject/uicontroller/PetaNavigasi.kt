@@ -16,8 +16,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.finalproject.ui.view.HomeScreen
 import com.example.finalproject.uicontroller.route.DestinasiHome
 import com.example.finalproject.uicontroller.route.DestinasiLogin
+import com.example.finalproject.uicontroller.route.DestinasiMealPlan
+import com.example.finalproject.uicontroller.route.DestinasiProfile
 import com.example.finalproject.uicontroller.route.DestinasiRegister
 import com.example.finalproject.view.LoginScreen
+import com.example.finalproject.view.MealPlannerScreen
+import com.example.finalproject.view.ProfileScreen
 import com.example.finalproject.view.RegisterScreen
 import com.example.finalproject.viewmodel.MainViewModel
 import com.example.finalproject.viewmodel.PenyediaViewModel
@@ -66,7 +70,25 @@ NavHost(navController = navController, startDestination = startDestination, modi
         RegisterScreen(onNavigateUp = { navController.navigateUp() })
     }
     composable(DestinasiHome.route) {
-        HomeScreen(navigateToItemEntry = { /*TODO*/ })
+        HomeScreen(
+            navigateToItemEntry = { /*TODO*/ }, 
+            navigateToMealPlan = { navController.navigate(DestinasiMealPlan.route) },
+            navigateToProfile = { navController.navigate(DestinasiProfile.route) }
+        )
+    }
+    composable(DestinasiMealPlan.route) {
+        MealPlannerScreen(navigateToHome = { navController.navigate(DestinasiHome.route) })
+    }
+    composable(DestinasiProfile.route) {
+        ProfileScreen(
+            onLogout = {
+                navController.navigate(DestinasiLogin.route) {
+                    popUpTo(0) { inclusive = true }
+                }
+            },
+            navigateToHome = { navController.navigate(DestinasiHome.route) },
+            navigateToMealPlan = { navController.navigate(DestinasiMealPlan.route) }
+        )
     }
 }
 }

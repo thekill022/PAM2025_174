@@ -3,4 +3,6 @@
     <string name="login">Login</string>
     <string name="regis">Register</string>
     <string name="home">Home</string>
+    <string name="meal">Meal Planner</string>
+    <string name="profile">Profile</string>
 </resources>

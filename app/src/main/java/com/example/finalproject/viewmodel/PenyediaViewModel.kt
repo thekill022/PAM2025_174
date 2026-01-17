@@ -34,5 +34,18 @@ object PenyediaViewModel {
                 aplikasiCalori().container.userPreferenceRepository
             )
         }
+        initializer {
+            MealPlannerViewModel(
+                aplikasiCalori().container.repositoryMealPlan,
+                aplikasiCalori().container.userPreferenceRepository,
+                aplikasiCalori().container.repositoryDataMakanan
+            )
+        }
+        initializer {
+            ProfileViewModel(
+                aplikasiCalori().container.userPreferenceRepository,
+                aplikasiCalori().container.repositoryDataBerat
+            )
+        }
     }
 }
